@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Habit Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ===== NOTIFICATION TOAST ===== -->
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <!-- ===== SIDEBAR / NAV ===== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-icon">✦</span>
+      <span class="brand-name">HabitTrack</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-section="dashboard">
+        <span class="nav-icon">⊞</span> Dashboard
+      </a>
+      <a href="#" class="nav-item" data-section="calendar">
+        <span class="nav-icon">◫</span> Kalender
+      </a>
+      <a href="#" class="nav-item" data-section="history">
+        <span class="nav-icon">◷</span> Riwayat
+      </a>
+    </nav>
+    <div class="sidebar-bottom">
+      <button class="theme-toggle" id="themeToggle" title="Ganti tema">
+        <span id="themeIcon">🌙</span>
+        <span id="themeLabel">Dark Mode</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ===== MOBILE TOPBAR ===== -->
+  <div class="mobile-topbar">
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <span class="mobile-brand">✦ HabitTrack</span>
+    <button class="theme-toggle-mobile" id="themeToggleMobile" title="Ganti tema">
+      <span id="themeIconMobile">🌙</span>
+    </button>
+  </div>
+
+  <!-- ===== OVERLAY (mobile sidebar) ===== -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main-content">
+
+    <!-- ========== SECTION: DASHBOARD ========== -->
+    <section class="section active" id="section-dashboard">
+
+      <!-- Header -->
+      <header class="page-header">
+        <div class="header-left">
+          <p class="header-greeting" id="greetingText">Selamat datang kembali!</p>
+          <h1 class="header-title">Habit Tracker</h1>
+          <p class="header-sub">Bangun kebiasaan baik sedikit demi sedikit setiap hari.</p>
+        </div>
+        <div class="header-right">
+          <div class="date-badge">
+            <span class="date-day" id="dateDay">03</span>
+            <div class="date-detail">
+              <span id="dateMonthYear">Juni 2026</span>
+              <span id="dateWeekday">Rabu</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Motivasi -->
+      <div class="motivation-bar" id="motivationBar">
+        <span class="motivation-icon">💡</span>
+        <span id="motivationText">Konsisten lebih penting daripada sempurna.</span>
+      </div>
+
+      <!-- Statistik -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon blue">📋</div>
+          <div class="stat-info">
+            <span class="stat-value" id="statTotal">4</span>
+            <span class="stat-label">Total Habit</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">✅</div>
+          <div class="stat-info">
+            <span class="stat-value" id="statDone">0</span>
+            <span class="stat-label">Selesai Hari Ini</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange">📊</div>
+          <div class="stat-info">
+            <span class="stat-value" id="statProgress">0%</span>
+            <span class="stat-label">Progress</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red">🔥</div>
+          <div class="stat-info">
+            <span class="stat-value" id="statStreak">0</span>
+            <span class="stat-label">Hari Streak</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-section">
+        <div class="progress-header">
+          <span class="progress-title">Progress Hari Ini</span>
+          <span class="progress-pct" id="progressPct">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        <div class="progress-steps">
+          <span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span>
+        </div>
+      </div>
+
+      <!-- Habit List Header -->
+      <div class="habits-header">
+        <h2 class="section-title">Kebiasaan Harian</h2>
+        <div class="habits-actions">
+          <button class="btn-add" id="btnAdd">+ Tambah Habit</button>
+          <button class="btn-reset" id="btnReset">↺ Reset Hari Ini</button>
+        </div>
+      </div>
+
+      <!-- Habit List -->
+      <div class="habit-list" id="habitList"></div>
+
+    </section>
+
+    <!-- ========== SECTION: CALENDAR ========== -->
+    <section class="section" id="section-calendar">
+      <header class="page-header">
+        <div class="header-left">
+          <p class="header-greeting">Lihat perkembanganmu</p>
+          <h1 class="header-title">Kalender Habit</h1>
+        </div>
+      </header>
+      <div class="calendar-wrapper">
+        <div class="calendar-card">
+          <div class="cal-nav">
+            <button class="cal-btn" id="prevMonth">‹</button>
+            <h3 class="cal-title" id="calTitle">Juni 2026</h3>
+            <button class="cal-btn" id="nextMonth">›</button>
+          </div>
+          <div class="cal-grid-header">
+            <span>Min</span><span>Sen</span><span>Sel</span>
+            <span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span>
+          </div>
+          <div class="cal-grid" id="calGrid"></div>
+        </div>
+        <div class="cal-detail" id="calDetail">
+          <p class="cal-detail-empty">Klik tanggal untuk melihat detail habit.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION: HISTORY ========== -->
+    <section class="section" id="section-history">
+      <header class="page-header">
+        <div class="header-left">
+          <p class="header-greeting">Perjalananmu tercatat di sini</p>
+          <h1 class="header-title">Riwayat Kebiasaan</h1>
+        </div>
+      </header>
+      <div class="history-list" id="historyList"></div>
+    </section>
+
+  </main>
+
+  <!-- ===== MODAL TAMBAH / EDIT HABIT ===== -->
+  <div class="modal-overlay" id="habitModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">Tambah Habit Baru</h3>
+        <button class="modal-close" id="modalClose">✕</button>
+      </div>
+
+      <!-- Emoji Picker -->
+      <div class="form-group">
+        <label class="form-label">Pilih Emoji</label>
+        <div class="emoji-grid" id="emojiGrid"></div>
+        <input type="text" class="form-input emoji-custom" id="emojiCustom"
+               placeholder="Atau ketik emoji sendiri..." maxlength="2" />
+      </div>
+
+      <!-- Nama Habit -->
+      <div class="form-group">
+        <label class="form-label" for="habitName">Nama Habit <span class="required">*</span></label>
+        <input type="text" class="form-input" id="habitName"
+               placeholder="Contoh: Meditasi, Jurnal Harian..." maxlength="40" />
+        <span class="form-hint" id="habitNameHint"></span>
+      </div>
+
+      <!-- Target -->
+      <div class="form-group">
+        <label class="form-label" for="habitTarget">Target <span class="required">*</span></label>
+        <input type="text" class="form-input" id="habitTarget"
+               placeholder="Contoh: 10 menit per hari" maxlength="60" />
+        <span class="form-hint" id="habitTargetHint"></span>
+      </div>
+
+      <div class="modal-footer">
+        <button class="modal-btn cancel" id="modalCancel">Batal</button>
+        <button class="modal-btn save"   id="modalSave">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
